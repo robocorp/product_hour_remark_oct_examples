@@ -67,6 +67,25 @@ def run_chat_interactive():
 
 
 @task
+def put_the_doc_in_the_prompt():
+    # NOTE: This will fail
+    source = "ICC-Men-s-CWC23-Playing-Conditions-single-pages.pdf"
+    reader = pypdf.PdfReader(source)
+    instructions = "\n".join(p.extract_text() for p in reader.pages)
+    chat = ChatOpenAI()
+    messages: List[BaseMessage] = [
+        SystemMessage(
+            content=f"""
+You're a helpful assistant. Here are the instructions to help you answer user questions:
+{instructions}
+""".lstrip()
+        ),
+        HumanMessage(content="How many players in a cricket team?"),
+    ]
+    chat.generate([messages])
+
+
+@task
 def load_document_embeddings_to_database():
     source = "ICC-Men-s-CWC23-Playing-Conditions-single-pages.pdf"
     reader = pypdf.PdfReader(source)
@@ -95,7 +114,7 @@ def load_document_embeddings_to_database():
 
 @task
 def rag_bot():
-    verbose = True
+    verbose = False
     db = Chroma(embedding_function=OpenAIEmbeddings(), persist_directory=".chroma")
     combine_docs_chain = load_qa_chain(
         llm=ChatOpenAI(model="gpt-3.5-turbo-16k"),
