@@ -11,8 +11,9 @@ dependencies:
   - pip:
     - robocorp==1.0.1                 # https://pypi.org/project/robocorp
     - openai==0.28.1                  # https://pypi.org/project/openai/
-    - langchain==0.0.317
+    - langchain==0.0.319
     - python-dotenv==1.0.0
     - chromadb==0.4.14
     - unstructured==0.10.24
     - tiktoken==0.5.1
+    - pypdf==3.16.4
