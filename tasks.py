@@ -80,7 +80,7 @@ You're a helpful assistant. Here are the instructions to help you answer user qu
 {instructions}
 """.lstrip()
         ),
-        HumanMessage(content="How many players in a cricket team?"),
+        HumanMessage(content="What is Umpire?"),
     ]
     chat.generate([messages])
 
@@ -116,19 +116,19 @@ def load_document_embeddings_to_database():
 def rag_bot():
     verbose = False
     db = Chroma(embedding_function=OpenAIEmbeddings(), persist_directory=".chroma")
-    combine_docs_chain = load_qa_chain(
+    answering_chain = load_qa_chain(
         llm=ChatOpenAI(model="gpt-3.5-turbo-16k"),
         prompt=_answering_prompt(),
         verbose=verbose,
         document_prompt=_document_prompt(),
     )
-    question_generator_chain = LLMChain(
+    retriever_chain = LLMChain(
         llm=ChatOpenAI(), prompt=_data_query_generating_prompt(), verbose=verbose
     )
     chain = ConversationalRetrievalChain(
-        combine_docs_chain=combine_docs_chain,
+        combine_docs_chain=answering_chain,
         retriever=db.as_retriever(search_kwargs={"k": 10}),
-        question_generator=question_generator_chain,
+        question_generator=retriever_chain,
         verbose=verbose,
     )
     messages: List[BaseMessage] = []
