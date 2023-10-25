@@ -44,8 +44,8 @@ In a galaxy
 def run_chat_llm_and_see_response():
     chat = ChatOpenAI()
     messages: List[BaseMessage] = [
-        SystemMessage(content="You're a helpful assistant."),
-        HumanMessage(content="Make a poem about a digital AI assistant called ReMark."),
+        SystemMessage(content="You're Batman."),
+        HumanMessage(content="Say hello to the audience of my webinar."),
     ]
     chat.generate([messages])
 
@@ -68,7 +68,6 @@ def run_chat_interactive():
 
 @task
 def put_the_doc_in_the_prompt():
-    # NOTE: This will fail
     source = "ICC-Men-s-CWC23-Playing-Conditions-single-pages.pdf"
     reader = pypdf.PdfReader(source)
     instructions = "\n".join(p.extract_text() for p in reader.pages)
